@@ -1,0 +1,51 @@
+# Wireshark SOC Analyst & Threat Hunting Labs
+
+A hands-on network security analysis portfolio documenting the investigation and triage of malicious traffic, credential exfiltration, brute force attacks, and VoIP packet capture replays using Wireshark.
+
+Completed via **Networkwalks Wireshark SOC Labs**.
+
+---
+
+## 📋 Overview & Score Summary
+
+| Lab | Focus / Scenario | Key Techniques / Artifacts | Score |
+| :--- | :--- | :--- | :---: |
+| **Lab 3** | Identify the Attacker's IP | SYN scanning analysis, port probe inspection, identifying target vs. attacker IPs | **100%** |
+| **Lab 4** | Follow TCP Stream (Part 1) | Reconstructing TCP conversations, chat stream triage, plaintext credential identification | **100%** |
+| **Lab 5** | Follow TCP Stream (Part 2) | Data exfiltration triage, backup server tracking, inspecting payload data transfers | **100%** |
+| **Lab 6** | HTTP Plaintext Credentials | Identifying insecure HTTP POST requests, credential sniffing, authentication status review | **90%** |
+| **Lab 7** | Brute Force Catch | Analyzing authentication brute force patterns, response failure/success code correlation | **100%** |
+| **Lab 8** | VoIP Call Replay | SIP/RTP protocol dissection, call stream reassembly, audio credential/data leakage recovery | **100%** |
+
+---
+
+## 🛠️ Lab Breakdowns & Core SOC Skills
+
+### Lab 3: Port Scan & Threat Actor Identification
+- **Techniques:** Filtered traffic using `tcp.flags.syn == 1 && tcp.flags.ack == 0` to isolate scan traffic.
+- **Findings:** Mapped scanned ports, distinguished between open ports (`SYN-ACK`) and closed ports (`RST-ACK`), and flagged attacker recon activity targeting corporate servers.
+
+### Lab 4 & 5: TCP Stream Reassembly & Internal Recon
+- **Techniques:** Leveraged Wireshark's **Follow TCP Stream** to reconstruct raw ASCII/text sessions.
+- **Findings:** Extracted operational chat logs, intercepted unencrypted administrative credentials, and traced sensitive files staged for egress to an unauthorized backup host.
+
+### Lab 6: Insecure Protocol Analysis (HTTP Credential Exposure)
+- **Techniques:** Applied display filters `http.request.method == "POST"` and inspected line-based text data.
+- **Findings:** Demonstrated the risk of cleartext HTTP authentication by intercepting targeted user accounts and evaluating corresponding server HTTP response codes.
+
+### Lab 7: Detecting Web Authentication Brute Force
+- **Techniques:** Analyzed high-frequency credential attempts, correlating repeated 401/403/failed login responses against the final successful authentication packet.
+- **Findings:** Isolated the successful password, targeted account, and confirmed attack dwell time.
+
+### Lab 8: Telephony & VoIP Traffic Carving
+- **Techniques:** Inspected VoIP control signaling (SIP) and media transport (RTP).
+- **Findings:** Extracted audio streams via Wireshark Telephony tools, analyzed codec parameters, and identified sensitive data spoken over cleartext voice channels.
+
+---
+
+## 🔍 Core Wireshark Display Filters Applied
+- **SYN Scans:** `tcp.flags.syn == 1 && tcp.flags.ack == 0`
+- **HTTP Logins:** `http.request.method == "POST" || http contains "password"`
+- **DNS Lookups:** `dns.flags.response == 0`
+- **VoIP Signaling:** `sip || rtp`
+- **Failed HTTP Responses:** `http.response.code >= 400`
