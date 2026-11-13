@@ -98,4 +98,4 @@ Successfully performed introductory reconnaissance activities using Kali Linux a
 
 ## Acknowledgements
 
-Special thanks to Sir Waqas Karim (CCIE) and the Networkwalks team for their guidance and support.
+Special thanks to Sir @Waqas Karim (CCIE) and the @Networkwalks team for their guidance and support.
